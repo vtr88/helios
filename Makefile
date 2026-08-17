@@ -3,12 +3,19 @@ CFLAGS ?= -O2
 CFLAGS += -std=c11 -Wall -Wextra -Wpedantic
 LDLIBS += -lm
 
-.PHONY: all check clean
+PREFIX ?= /usr/local
+BINDIR ?= $(PREFIX)/bin
+
+.PHONY: all check install clean
 
 all: helios
 
 helios: helios.c
 	$(CC) $(CFLAGS) $< -o $@ $(LDLIBS)
+
+install: helios
+	install -d "$(DESTDIR)$(BINDIR)"
+	install -m 755 helios "$(DESTDIR)$(BINDIR)/helios"
 
 check: helios
 	./helios --help >/dev/null
